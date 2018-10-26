@@ -9,6 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import generatebarcode.com.expandablelistnlevel.R;
+import generatebarcode.com.expandablelistnlevel.model.MainModel;
 
 
 /**
@@ -45,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
     /**
      * The Movies Genre List.
      */
-
 
     // We have two  main category. (third one is left for example addition)
     String[] movies = new String[]{"Horror", "Action", "Thriller/Drama"};
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Datastructure for Third level movies.
      */
-    LinkedHashMap<String, String[]> thirdLevelMovies = new LinkedHashMap<>();
+    LinkedHashMap<String, String[]> thirdLevel = new LinkedHashMap<>();
     /**
      * Datastructure for Third level games.
      */
@@ -134,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //PC================================================PC//
 
         // second level category names (genres)
         secondLevel.add(movies);
@@ -141,29 +142,22 @@ public class MainActivity extends AppCompatActivity {
         // secondLevel.add(serials);
 
         // movies category all data
-        thirdLevelMovies.put(movies[0], horror);
-        thirdLevelMovies.put(movies[1], action);
-        thirdLevelMovies.put(movies[2], thriller);
-
-
+        thirdLevel.put(movies[0], horror);
+        thirdLevel.put(movies[1], action);
+        thirdLevel.put(movies[2], thriller);
         // games category all data
         thirdLevelGames.put(games[0], fps);
         thirdLevelGames.put(games[1], moba);
         thirdLevelGames.put(games[2], rpg);
         thirdLevelGames.put(games[3], racing);
-
-
-        // serials category all data
-      /*  thirdLevelSerials.put(serials[0], crime);
-        thirdLevelSerials.put(serials[1], family);
-        thirdLevelSerials.put(serials[2], comedy);
-*/
-
-
         // all data
-        data.add(thirdLevelMovies);
+        data.add(thirdLevel);
         data.add(thirdLevelGames);
         //data.add(thirdLevelSerials);
+
+        //PC================================================PC//
+
+      //  dataSet();
 
 
         // expandable listview
@@ -174,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         // set adapter
-        expandableListView.setAdapter( threeLevelListAdapterAdapter );
+        expandableListView.setAdapter(threeLevelListAdapterAdapter);
 
 
         // OPTIONAL : Show one list at a time
@@ -188,6 +182,46 @@ public class MainActivity extends AppCompatActivity {
                 previousGroup = groupPosition;
             }
         });
+    }
+
+    void dataSet() {
+        //Data Structure
+        String[] categories = null;
+        String[] products = null;
+        String[] variants = null;
+
+        String[] rankings = null;
+        int[] rankingsProduct = null;
+
+        MainModel model = new MainModel();
+        //For Categories
+        for (int i = 0; i < model.getCategories().size(); i++) {
+            categories[i] = model.getCategories().get(i).getName();
+            for (int j = 0; j < model.getCategories().get(i).getProducts().size(); j++) {
+                products[j] = model.getCategories().get(i).getProducts().get(j).getName();
+                for (int k = 0; k < model.getCategories().get(i).getProducts().get(j).getVariants().size(); j++) {
+                    variants[k] = model.getCategories().get(i).getProducts().get(j).getVariants().get(k).getColor();
+                }
+                // third level category names
+                thirdLevel.put(products[j], variants);
+            }
+            // second level category names
+            secondLevel.add(products);
+            data.add(thirdLevel);
+        }
+
+        //For Ranking
+      /*  for (int i = 0; i < model.getCategories().size(); i++) {
+            rankings[i]= model.getRankings().get(i).getRanking();
+            for (int j = 0; j < model.getRankings().get(i).getProducts().size(); j++) {
+                rankingsProduct[j] = model.getRankings().get(i).getProducts().get(j).getId();
+            }
+        }*/
+
+
+        // all data
+
+        //data.add(thirdLevelSerials);
 
 
     }
